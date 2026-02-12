@@ -26,6 +26,29 @@ class PhotosController < ApplicationController
     @photos = Photo.chronological.with_attached_image
   end
 
+  def bulk_upload
+    return unless request.post?
+
+    @results = { added: [], failed: [] }
+
+    Array(params[:photos]).each do |file|
+      stem = File.basename(file.original_filename, ".*")
+      begin
+        taken_on = Date.strptime(stem, "%Y%m%d")
+      rescue Date::Error
+        next  # silently ignore non-conforming filenames
+      end
+
+      photo = Photo.find_or_initialize_by(taken_on: taken_on)
+      photo.image = file
+      if photo.save
+        @results[:added] << "#{file.original_filename} → #{taken_on}"
+      else
+        @results[:failed] << "#{file.original_filename} — #{photo.errors.full_messages.to_sentence}"
+      end
+    end
+  end
+
   def new
     @photo = Photo.new(taken_on: Date.current)
     @photo.taken_on = Date.parse(params[:date]) if params[:date].present?

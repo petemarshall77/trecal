@@ -1,4 +1,9 @@
 <div class="max-w-2xl mx-auto">
+  <%# Top nav %>
+  <div class="flex justify-end mb-2">
+    <%= link_to "Bulk upload", bulk_upload_photos_path, class: "text-sm text-blue-600 hover:underline" %>
+  </div>
+
   <%# Month navigation %>
   <div class="flex items-center justify-between mb-4">
     <%= link_to "← Prev", @prev_month_path, class: "text-sm text-blue-600 hover:underline" %>

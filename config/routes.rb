@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   # Photos
   resources :photos, only: [:new, :create, :show, :edit, :update, :destroy] do
     collection do
-      get :roll   # /photos/roll — camera roll
+      get  :roll          # /photos/roll — camera roll
+      get  :bulk_upload
+      post :bulk_upload
     end
   end
 

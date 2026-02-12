@@ -1,0 +1,46 @@
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-2xl font-semibold text-gray-800 mb-6">Bulk Upload</h1>
+
+  <%= form_with url: bulk_upload_photos_path, method: :post, multipart: true do |f| %>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Photos (filenames must be <code>YYYYMMDD.jpg</code>)
+      </label>
+      <input type="file" name="photos[]" multiple accept=".jpg,image/jpeg"
+             class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
+                    file:rounded file:border-0 file:text-sm file:font-medium
+                    file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+    </div>
+    <%= f.submit "Upload", class: "px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700" %>
+  <% end %>
+
+  <% if @results %>
+    <div class="mt-8 space-y-4">
+      <% if @results[:added].any? %>
+        <div>
+          <h2 class="text-lg font-medium text-green-700 mb-2">Added (<%= @results[:added].size %>)</h2>
+          <ul class="space-y-1">
+            <% @results[:added].each do |msg| %>
+              <li class="text-sm text-gray-700"><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <% if @results[:failed].any? %>
+        <div>
+          <h2 class="text-lg font-medium text-red-700 mb-2">Failed (<%= @results[:failed].size %>)</h2>
+          <ul class="space-y-1">
+            <% @results[:failed].each do |msg| %>
+              <li class="text-sm text-red-600"><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <% if @results[:added].empty? && @results[:failed].empty? %>
+        <p class="text-sm text-gray-500">No files with matching filenames were found.</p>
+      <% end %>
+    </div>
+  <% end %>
+</div>
