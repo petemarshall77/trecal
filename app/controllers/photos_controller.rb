@@ -1,5 +1,5 @@
 class PhotosController < ApplicationController
-  before_action :set_photo, only: [:show, :edit, :update, :destroy]
+  before_action :set_photo, only: [ :show, :edit, :update, :destroy ]
 
   def calendar
     @year  = (params[:year]  || Date.current.year).to_i
