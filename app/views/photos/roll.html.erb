@@ -7,7 +7,7 @@
         <% @photos.each do |photo| %>
           <%= link_to photo_path(photo), class: "flex flex-col items-center gap-1 group flex-shrink-0" do %>
             <div class="w-32 h-32 rounded overflow-hidden border border-gray-200">
-              <%= image_tag photo.image.variant(resize_to_fill: [256, 256]),
+              <%= image_tag photo.image,
                   class: "w-full h-full object-cover group-hover:opacity-80 transition-opacity",
                   alt: photo.taken_on.strftime("%B %-d, %Y") %>
             </div>

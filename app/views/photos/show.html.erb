@@ -25,7 +25,7 @@
     <% if @prev_photo %>
       <%= link_to photo_path(@prev_photo), class: "flex flex-col items-center gap-1 group" do %>
         <div class="w-12 h-12 rounded overflow-hidden">
-          <%= image_tag @prev_photo.image.variant(resize_to_fill: [96, 96]),
+          <%= image_tag @prev_photo.image,
               class: "w-full h-full object-cover group-hover:opacity-80 transition-opacity",
               alt: @prev_photo.taken_on.strftime("%B %-d") %>
         </div>
@@ -38,7 +38,7 @@
     <% if @next_photo %>
       <%= link_to photo_path(@next_photo), class: "flex flex-col items-center gap-1 group" do %>
         <div class="w-12 h-12 rounded overflow-hidden">
-          <%= image_tag @next_photo.image.variant(resize_to_fill: [96, 96]),
+          <%= image_tag @next_photo.image,
               class: "w-full h-full object-cover group-hover:opacity-80 transition-opacity",
               alt: @next_photo.taken_on.strftime("%B %-d") %>
         </div>

@@ -31,7 +31,7 @@
         <div class="aspect-square relative <%= in_month ? '' : 'opacity-30' %>">
           <% if photo %>
             <%= link_to photo_path(photo), class: "block w-full h-full" do %>
-              <%= image_tag photo.image.variant(resize_to_fill: [200, 200]),
+              <%= image_tag photo.image,
                   class: "w-full h-full object-cover rounded #{ is_today ? 'ring-2 ring-blue-500' : '' }",
                   alt: date.strftime("%B %-d") %>
             <% end %>
