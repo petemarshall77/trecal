@@ -15,9 +15,31 @@
     </div>
   </div>
 
-  <%# Full-size photo %>
-  <div class="rounded overflow-hidden shadow-sm mb-6">
+  <%# Full-size photo with nav arrows %>
+  <div class="relative rounded overflow-hidden shadow-sm mb-6"
+       data-controller="photo-nav"
+       data-photo-nav-prev-url-value="<%= @prev_photo ? photo_path(@prev_photo) : '' %>"
+       data-photo-nav-next-url-value="<%= @next_photo ? photo_path(@next_photo) : '' %>"
+       data-action="keydown@window->photo-nav#handleKey
+                    touchstart->photo-nav#touchStart
+                    touchend->photo-nav#touchEnd">
     <%= image_tag @photo.image, class: "w-full", alt: @photo.taken_on.strftime("%B %-d, %Y") %>
+
+    <% if @prev_photo %>
+      <%= link_to photo_path(@prev_photo),
+          class: "absolute left-0 inset-y-0 flex items-center px-3 bg-black/20 hover:bg-black/40 transition-colors",
+          aria: { label: "Previous photo" } do %>
+        <span class="text-white text-3xl leading-none select-none">‹</span>
+      <% end %>
+    <% end %>
+
+    <% if @next_photo %>
+      <%= link_to photo_path(@next_photo),
+          class: "absolute right-0 inset-y-0 flex items-center px-3 bg-black/20 hover:bg-black/40 transition-colors",
+          aria: { label: "Next photo" } do %>
+        <span class="text-white text-3xl leading-none select-none">›</span>
+      <% end %>
+    <% end %>
   </div>
 
   <%# Prev/Next navigation %>
