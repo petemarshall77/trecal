@@ -1,0 +1,56 @@
+<div class="max-w-2xl mx-auto">
+  <%# Month navigation %>
+  <div class="flex items-center justify-between mb-4">
+    <%= link_to "← Prev", @prev_month_path, class: "text-sm text-blue-600 hover:underline" %>
+    <h2 class="text-xl font-semibold text-gray-800">
+      <%= @current_month_start.strftime("%B %Y") %>
+    </h2>
+    <% if @next_month_path %>
+      <%= link_to "Next →", @next_month_path, class: "text-sm text-blue-600 hover:underline" %>
+    <% else %>
+      <span class="text-sm text-gray-400">Next →</span>
+    <% end %>
+  </div>
+
+  <%# Day-of-week header %>
+  <div class="grid grid-cols-7 mb-1">
+    <% %w[Sun Mon Tue Wed Thu Fri Sat].each do |day| %>
+      <div class="text-center text-xs font-medium text-gray-500 py-1"><%= day %></div>
+    <% end %>
+  </div>
+
+  <%# Calendar grid %>
+  <div class="grid grid-cols-7 gap-1">
+    <% @weeks.each do |week| %>
+      <% week.each do |date| %>
+        <% in_month = date.month == @current_month_start.month %>
+        <% is_today = date == Date.current %>
+        <% is_future = date > Date.current %>
+        <% photo = @photos_by_date[date] %>
+
+        <div class="aspect-square relative <%= in_month ? '' : 'opacity-30' %>">
+          <% if photo %>
+            <%= link_to photo_path(photo), class: "block w-full h-full" do %>
+              <%= image_tag photo.image.variant(resize_to_fill: [200, 200]),
+                  class: "w-full h-full object-cover rounded #{ is_today ? 'ring-2 ring-blue-500' : '' }",
+                  alt: date.strftime("%B %-d") %>
+            <% end %>
+          <% elsif !is_future && in_month %>
+            <%= link_to new_photo_path(date: date.iso8601),
+                class: "flex items-center justify-center w-full h-full rounded border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 transition-colors #{ is_today ? 'border-blue-400 bg-blue-50' : '' }" do %>
+              <span class="text-2xl text-gray-400 hover:text-blue-500">+</span>
+            <% end %>
+          <% else %>
+            <div class="w-full h-full rounded bg-gray-100 opacity-40"></div>
+          <% end %>
+
+          <% if in_month %>
+            <span class="absolute bottom-1 right-1 text-xs <%= photo ? 'text-white drop-shadow' : 'text-gray-500' %>">
+              <%= date.day %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="max-w-2xl mx-auto">
+  <%# Header %>
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-semibold text-gray-800">
+      <%= @photo.taken_on.strftime("%B %-d, %Y") %>
+    </h2>
+    <div class="flex items-center gap-3">
+      <%= link_to "← Back to calendar", calendar_month_path(year: @photo.taken_on.year, month: @photo.taken_on.month),
+          class: "text-sm text-blue-600 hover:underline" %>
+      <%= link_to "Edit photo", edit_photo_path(@photo),
+          class: "text-sm text-gray-600 hover:underline" %>
+      <%= button_to "Delete", photo_path(@photo), method: :delete,
+          data: { turbo_confirm: "Delete this photo?" },
+          class: "text-sm text-red-600 hover:underline cursor-pointer bg-transparent border-none p-0" %>
+    </div>
+  </div>
+
+  <%# Full-size photo %>
+  <div class="rounded overflow-hidden shadow-sm mb-6">
+    <%= image_tag @photo.image, class: "w-full", alt: @photo.taken_on.strftime("%B %-d, %Y") %>
+  </div>
+
+  <%# Prev/Next navigation %>
+  <div class="flex items-center justify-between">
+    <% if @prev_photo %>
+      <%= link_to photo_path(@prev_photo), class: "flex flex-col items-center gap-1 group" do %>
+        <div class="w-12 h-12 rounded overflow-hidden">
+          <%= image_tag @prev_photo.image.variant(resize_to_fill: [96, 96]),
+              class: "w-full h-full object-cover group-hover:opacity-80 transition-opacity",
+              alt: @prev_photo.taken_on.strftime("%B %-d") %>
+        </div>
+        <span class="text-xs text-gray-500 group-hover:text-gray-800">← <%= @prev_photo.taken_on.strftime("%b %-d") %></span>
+      <% end %>
+    <% else %>
+      <div></div>
+    <% end %>
+
+    <% if @next_photo %>
+      <%= link_to photo_path(@next_photo), class: "flex flex-col items-center gap-1 group" do %>
+        <div class="w-12 h-12 rounded overflow-hidden">
+          <%= image_tag @next_photo.image.variant(resize_to_fill: [96, 96]),
+              class: "w-full h-full object-cover group-hover:opacity-80 transition-opacity",
+              alt: @next_photo.taken_on.strftime("%B %-d") %>
+        </div>
+        <span class="text-xs text-gray-500 group-hover:text-gray-800"><%= @next_photo.taken_on.strftime("%b %-d") %> →</span>
+      <% end %>
+    <% else %>
+      <div></div>
+    <% end %>
+  </div>
+</div>

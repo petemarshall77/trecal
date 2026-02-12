@@ -1,0 +1,28 @@
+<div class="max-w-full">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">Camera Roll</h2>
+
+  <% if @photos.any? %>
+    <div class="overflow-x-auto">
+      <div class="flex gap-3 pb-3" style="width: max-content">
+        <% @photos.each do |photo| %>
+          <%= link_to photo_path(photo), class: "flex flex-col items-center gap-1 group flex-shrink-0" do %>
+            <div class="w-32 h-32 rounded overflow-hidden border border-gray-200">
+              <%= image_tag photo.image.variant(resize_to_fill: [256, 256]),
+                  class: "w-full h-full object-cover group-hover:opacity-80 transition-opacity",
+                  alt: photo.taken_on.strftime("%B %-d, %Y") %>
+            </div>
+            <span class="text-xs text-gray-500 group-hover:text-gray-800">
+              <%= photo.taken_on.strftime("%b %-d, %Y") %>
+            </span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="text-center py-16 text-gray-500">
+      <p class="mb-3">No photos yet.</p>
+      <%= link_to "Upload your first photo", new_photo_path,
+          class: "text-blue-600 hover:underline text-sm" %>
+    </div>
+  <% end %>
+</div>

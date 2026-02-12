@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-50">
+  <head>
+    <title><%= content_for(:title) || "Treecal" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="h-full flex flex-col">
+    <nav class="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-6">
+      <span class="font-semibold text-lg text-gray-800">Treecal</span>
+      <div class="flex items-center gap-4 ml-2">
+        <%= link_to "Calendar", calendar_path, class: "text-sm text-gray-600 hover:text-gray-900" %>
+        <%= link_to "Camera Roll", roll_photos_path, class: "text-sm text-gray-600 hover:text-gray-900" %>
+        <%= link_to "Upload", new_photo_path, class: "text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700" %>
+      </div>
+      <div class="ml-auto">
+        <%= button_to "Sign out", session_path, method: :delete,
+            class: "text-sm text-gray-500 hover:text-gray-700 cursor-pointer" %>
+      </div>
+    </nav>
+
+    <% if notice.present? %>
+      <div class="bg-green-50 border-b border-green-200 px-4 py-2 text-sm text-green-800">
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <% if alert.present? %>
+      <div class="bg-yellow-50 border-b border-yellow-200 px-4 py-2 text-sm text-yellow-800">
+        <%= alert %>
+      </div>
+    <% end %>
+
+    <main class="flex-1 p-4">
+      <%= yield %>
+    </main>
+  </body>
+</html>

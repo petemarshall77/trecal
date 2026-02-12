@@ -1,0 +1,50 @@
+<div class="max-w-lg mx-auto">
+  <h2 class="text-xl font-semibold text-gray-800 mb-6">Edit Photo</h2>
+
+  <% if @photo.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded px-4 py-3 mb-5">
+      <p class="text-sm font-medium text-red-700 mb-1">
+        <%= pluralize(@photo.errors.count, "error") %> prevented this photo from being saved:
+      </p>
+      <ul class="list-disc list-inside text-sm text-red-600">
+        <% @photo.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%# Read-only date label %>
+  <div class="mb-5">
+    <span class="block text-sm font-medium text-gray-700 mb-1">Date</span>
+    <span class="text-sm text-gray-600 bg-gray-100 rounded px-3 py-2 inline-block">
+      <%= @photo.taken_on.strftime("%B %-d, %Y") %>
+    </span>
+    <p class="text-xs text-gray-500 mt-1">Date cannot be changed after upload.</p>
+  </div>
+
+  <%# Current image preview %>
+  <div class="mb-5">
+    <span class="block text-sm font-medium text-gray-700 mb-2">Current photo</span>
+    <div class="w-40 h-40 rounded overflow-hidden border border-gray-200">
+      <%= image_tag @photo.image.variant(resize_to_fill: [320, 320]),
+          class: "w-full h-full object-cover",
+          alt: @photo.taken_on.strftime("%B %-d, %Y") %>
+    </div>
+  </div>
+
+  <%= form_with model: @photo, class: "space-y-5" do |form| %>
+    <div>
+      <%= form.label :image, "Replace with new photo", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= form.file_field :image,
+          accept: "image/jpeg,image/png,image/gif,image/webp,image/heic",
+          class: "w-full text-sm text-gray-600 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <%= form.submit "Replace Photo",
+          class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-5 rounded cursor-pointer" %>
+      <%= link_to "Cancel", photo_path(@photo), class: "text-sm text-gray-500 hover:underline" %>
+    </div>
+  <% end %>
+</div>
