@@ -1,19 +1,31 @@
 <div class="max-w-full">
   <h2 class="text-xl font-semibold text-gray-800 mb-4">Camera Roll</h2>
 
-  <% if @photos.any? %>
+  <% if @dates.any? %>
     <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 gap-2">
-      <% @photos.each do |photo| %>
-        <%= link_to photo_path(photo), class: "flex flex-col items-center gap-1 group" do %>
-          <div class="aspect-square w-full rounded overflow-hidden border border-gray-200">
-            <%= image_tag photo.image,
-                class: "w-full h-full object-cover group-hover:opacity-80 transition-opacity",
-                alt: photo.taken_on.strftime("%B %-d, %Y") %>
+      <% @dates.each do |date| %>
+        <% photo = @photos_by_date[date] %>
+        <div class="flex flex-col items-center gap-1">
+          <div class="aspect-square w-full">
+            <% if photo %>
+              <%= link_to photo_path(photo), class: "block w-full h-full" do %>
+                <div class="w-full h-full rounded overflow-hidden border border-gray-200">
+                  <%= image_tag photo.image,
+                      class: "w-full h-full object-cover hover:opacity-80 transition-opacity",
+                      alt: date.strftime("%B %-d, %Y") %>
+                </div>
+              <% end %>
+            <% else %>
+              <%= link_to new_photo_path(date: date.iso8601),
+                  class: "flex items-center justify-center w-full h-full rounded border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50 transition-colors" do %>
+                <span class="text-2xl text-gray-400 hover:text-blue-500">+</span>
+              <% end %>
+            <% end %>
           </div>
-          <span class="text-xs text-gray-500 group-hover:text-gray-800 text-center">
-            <%= photo.taken_on.strftime("%b %-d, %Y") %>
+          <span class="text-xs text-gray-500 text-center">
+            <%= date.strftime("%b %-d, %Y") %>
           </span>
-        <% end %>
+        </div>
       <% end %>
     </div>
   <% else %>

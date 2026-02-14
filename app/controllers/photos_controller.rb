@@ -23,7 +23,10 @@ class PhotosController < ApplicationController
   end
 
   def roll
-    @photos = Photo.chronological.with_attached_image
+    photos = Photo.chronological.with_attached_image
+    @photos_by_date = photos.index_by(&:taken_on)
+    first_date = @photos_by_date.keys.min
+    @dates = first_date ? (first_date..Date.current).to_a : []
   end
 
   def bulk_upload
