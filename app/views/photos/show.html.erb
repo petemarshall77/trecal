@@ -1,4 +1,10 @@
-<div class="max-w-2xl mx-auto">
+<div class="max-w-2xl mx-auto"
+     data-controller="lightbox"
+     data-lightbox-prev-url-value="<%= @prev_photo ? photo_path(@prev_photo) : '' %>"
+     data-lightbox-next-url-value="<%= @next_photo ? photo_path(@next_photo) : '' %>"
+     data-action="keydown@window->lightbox#handleKey
+                  touchstart@window->lightbox#touchStart
+                  touchend@window->lightbox#touchEnd">
   <%# Header %>
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-xl font-semibold text-gray-800">
@@ -16,14 +22,11 @@
   </div>
 
   <%# Full-size photo with nav arrows %>
-  <div class="relative rounded overflow-hidden shadow-sm mb-6"
-       data-controller="photo-nav"
-       data-photo-nav-prev-url-value="<%= @prev_photo ? photo_path(@prev_photo) : '' %>"
-       data-photo-nav-next-url-value="<%= @next_photo ? photo_path(@next_photo) : '' %>"
-       data-action="keydown@window->photo-nav#handleKey
-                    touchstart->photo-nav#touchStart
-                    touchend->photo-nav#touchEnd">
-    <%= image_tag @photo.image, class: "w-full", alt: @photo.taken_on.strftime("%B %-d, %Y") %>
+  <div class="relative rounded overflow-hidden shadow-sm mb-6">
+    <%= image_tag @photo.image,
+        class: "w-full cursor-zoom-in",
+        alt:   @photo.taken_on.strftime("%B %-d, %Y"),
+        data:  { action: "click->lightbox#open" } %>
 
     <% if @prev_photo %>
       <%= link_to photo_path(@prev_photo),
@@ -68,6 +71,35 @@
       <% end %>
     <% else %>
       <div></div>
+    <% end %>
+  </div>
+
+  <%# Fullscreen lightbox overlay %>
+  <div data-lightbox-target="overlay"
+       class="fixed inset-0 z-50 bg-black flex items-center justify-center hidden">
+
+    <%# Close button %>
+    <button data-action="lightbox#close"
+            class="absolute top-4 right-4 z-10 text-white/60 hover:text-white text-4xl leading-none select-none"
+            aria-label="Close fullscreen">×</button>
+
+    <%# Full-size image %>
+    <%= image_tag @photo.image,
+        class: "max-h-screen max-w-full object-contain",
+        alt:   @photo.taken_on.strftime("%B %-d, %Y") %>
+
+    <%# Prev arrow %>
+    <% if @prev_photo %>
+      <button data-action="lightbox#navigatePrev"
+              class="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-6xl leading-none select-none"
+              aria-label="Previous photo">‹</button>
+    <% end %>
+
+    <%# Next arrow %>
+    <% if @next_photo %>
+      <button data-action="lightbox#navigateNext"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-6xl leading-none select-none"
+              aria-label="Next photo">›</button>
     <% end %>
   </div>
 </div>
