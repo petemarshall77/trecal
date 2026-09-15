@@ -29,6 +29,12 @@ class PhotosController < ApplicationController
     @dates = first_date ? (first_date..Date.current).to_a : []
   end
 
+  def all_images
+    photos = Photo.chronological.with_attached_image
+    @photos_by_date = photos.index_by(&:taken_on)
+    @dates = @photos_by_date.keys.sort
+  end
+
   def bulk_upload
     return unless request.post?
 
