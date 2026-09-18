@@ -1,16 +1,21 @@
 <% if dates.any? %>
-  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 gap-2">
+  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 gap-2" data-date-toggle-target="grid">
     <% dates.each do |date| %>
       <% photo = photos_by_date[date] %>
       <div class="flex flex-col items-center gap-1">
         <div class="aspect-square w-full">
           <% if photo %>
-            <%= link_to photo_path(photo), class: "block w-full h-full" do %>
-              <div class="w-full h-full rounded overflow-hidden border border-gray-200">
+            <%= link_to photo_path(photo), class: "block relative group w-full h-full" do %>
+              <div class="w-full h-full rounded overflow-hidden border border-gray-200" data-date-toggle-target="frame">
                 <%= image_tag photo.image,
                     class: "w-full h-full object-cover hover:opacity-80 transition-opacity",
                     alt: date.strftime("%B %-d, %Y") %>
               </div>
+              <%# Hover caption; only revealed (via group-hover:block) when dates are toggled off %>
+              <span class="hidden absolute inset-x-0 bottom-0 bg-black/60 text-white text-xs text-center py-0.5 pointer-events-none"
+                    data-date-toggle-target="caption">
+                <%= date.strftime("%b %-d, %Y") %>
+              </span>
             <% end %>
           <% else %>
             <%= link_to new_photo_path(date: date.iso8601),
@@ -19,7 +24,7 @@
             <% end %>
           <% end %>
         </div>
-        <span class="text-xs text-gray-500 text-center">
+        <span class="text-xs text-gray-500 text-center" data-date-toggle-target="label">
           <%= date.strftime("%b %-d, %Y") %>
         </span>
       </div>

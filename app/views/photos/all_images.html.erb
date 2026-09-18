@@ -1,5 +1,15 @@
-<div class="max-w-full">
-  <h2 class="text-xl font-semibold text-gray-800 mb-4">All Images</h2>
+<div class="max-w-full" data-controller="date-toggle">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-semibold text-gray-800">All Images</h2>
+
+    <label class="flex items-center gap-2 cursor-pointer select-none">
+      <span class="text-sm text-gray-600">Show dates</span>
+      <input type="checkbox" checked class="sr-only peer"
+             data-date-toggle-target="checkbox"
+             data-action="change->date-toggle#toggle">
+      <div class="relative w-9 h-5 rounded-full bg-gray-300 transition-colors peer-checked:bg-blue-600 peer-focus-visible:ring-2 peer-focus-visible:ring-blue-400 peer-focus-visible:ring-offset-2 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-4"></div>
+    </label>
+  </div>
 
   <%= render "roll_grid", dates: @dates, photos_by_date: @photos_by_date %>
 </div>
